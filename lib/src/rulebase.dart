@@ -40,7 +40,7 @@ class FuzzyRuleBase {
 
   void addRules(List<FuzzyRule> frs) => rules.addAll(frs);
 
-  void resolve({List<FuzzyValue> inputs, List<FuzzyValue> outputs}) {
+  void resolve({List<FuzzyValue>? inputs, required List<FuzzyValue> outputs}) {
     // TODO: infer what rules to run based on outputs
     for (final output in outputs) {
       if (output.crispValue != null) {

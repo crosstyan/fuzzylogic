@@ -6,16 +6,16 @@ part of fuzzylogic;
 /// [:medium:] and [:long:]). The corresponding FuzzySet for [:distance.Short:]
 /// would be such that is [FuzzyTrue] for distances in range of 5 meters, then
 /// slopes towards [FuzzyFalse] for ranges 5-20 meters (for example).
-class FuzzySet<T extends num> extends FuzzyNode {
+class FuzzySet<T extends num?> extends FuzzyNode {
   /// Finds the crisp value using the given [inputs], then finds the degree
   /// of membership of that crisp value in the set.
   @override
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs) {
+  num getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs) {
     var fuzzyValue =
-        inputs.singleWhere((FuzzyValue value) => value.variable == variable);
+        inputs!.singleWhere((FuzzyValue value) => value.variable == variable);
 
     logger.fine('- getting degree of membership for ' +
-        _nameOrUnnamed(variable.name, 'FuzzyVariable'));
+        _nameOrUnnamed(variable!.name, 'FuzzyVariable'));
 
     // TODO: for non-crisp values
     return getDegreeOfMembership(fuzzyValue.crispValue as T);
@@ -23,7 +23,7 @@ class FuzzySet<T extends num> extends FuzzyNode {
 
   /// Finds the degree of membership of a given crisp value in the set.
   num getDegreeOfMembership(T crispValue) {
-    var dom = membershipFunction.getDegreeOfMembership(crispValue);
+    var dom = membershipFunction.getDegreeOfMembership(crispValue)!;
     logger.fine('- degree of membership for ' +
         _nameOrUnnamed(name, 'set') +
         ' (repr=$representativeValue) is ${(dom * 100).round()}');
@@ -34,7 +34,7 @@ class FuzzySet<T extends num> extends FuzzyNode {
   /// consequent of a FuzzyRule, it will be assigned a degree of truth according
   /// to the degree of truth of the antecedent.
   @override
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs) {
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs) {
     outputs
         .where((fuzzyValue) => fuzzyValue.variable == variable)
         .forEach((fuzzyValue) {
@@ -43,21 +43,21 @@ class FuzzySet<T extends num> extends FuzzyNode {
   }
 
   /// Returns the domain of membership (DOM) of the given value.
-  final MembershipFunction<T> membershipFunction;
+  final MembershipFunction<T?> membershipFunction;
 
   /// The crisp value most representative of this set.
   final T representativeValue;
 
   /// The FLV of which this fuzzy set is a part.
-  FuzzyVariable<T> variable;
+  FuzzyVariable<T>? variable;
 
   /// Optional name of the fuzzy set (for logging).
-  String name;
+  String? name;
 
   @override
   String toString() {
-    if (variable.name == null) return 'FuzzySet<$name>';
-    return '${variable.name}<$name>';
+    if (variable!.name == null) return 'FuzzySet<$name>';
+    return '${variable!.name}<$name>';
   }
 
   /// The most generic constructor. The crisp values don't need to be numeric
@@ -96,8 +96,8 @@ class FuzzySet<T extends num> extends FuzzyNode {
           [maximum, 0]
         ]),
         representativeValue = (T is double
-            ? peakStart + (peakEnd - peakStart) / 2
-            : peakStart + (peakEnd - peakStart) ~/ 2) as T;
+            ? peakStart! + (peakEnd! - peakStart) / 2
+            : peakStart! + (peakEnd! - peakStart) ~/ 2) as T;
 }
 
 abstract class MembershipFunction<T> {

@@ -22,7 +22,7 @@ class Ammo extends FuzzyVariable<int> {
   }
 }
 
-class Desirability extends FuzzyVariable<int> {
+class Desirability extends FuzzyVariable<int?> {
   var Undesirable = FuzzySet.LeftShoulder(0, 20, 50);
   var Desirable = FuzzySet.Triangle(20, 50, 70);
   var VeryDesirable = FuzzySet.RightShoulder(50, 70, 100);
@@ -58,7 +58,7 @@ void main() {
   ]);
 
   // Create the placeholder for output.
-  var bazookaOutput = bazookaDesirability.createOutputPlaceholder();
+  FuzzyValue<int?> bazookaOutput = bazookaDesirability.createOutputPlaceholder();
 
   // Use the fuzzy inference engine.
   frb.resolve(

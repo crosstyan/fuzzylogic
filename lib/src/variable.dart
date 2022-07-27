@@ -1,11 +1,11 @@
 part of fuzzylogic;
 
 /// Fuzzy
-class FuzzyVariable<T extends num> {
-  List<FuzzySet<T>> sets;
+class FuzzyVariable<T extends num?> {
+  late List<FuzzySet<T>> sets;
 
   /// Optional name, for logging.
-  String name;
+  String? name;
 
   /// This *must* be called before the variable is worked with.
   void init() {

@@ -22,7 +22,7 @@ class Workload extends FuzzyVariable<int> {
   }
 }
 
-class Amount extends FuzzyVariable<int> {
+class Amount extends FuzzyVariable<int?> {
   var None = FuzzySet.LeftShoulder(0, 0, 1);
   var One = FuzzySet.Triangle(0, 1, 2);
   var Couple = FuzzySet.Triangle(1, 2, 4);
@@ -50,7 +50,7 @@ void main() {
     (very(workload.VeryBusy)) >> (amountOfBooks.None)
   ]);
 
-  var amount = amountOfBooks.createOutputPlaceholder();
+  FuzzyValue<int?> amount = amountOfBooks.createOutputPlaceholder();
 
   frb.resolve(
       inputs: [intelligence.assign(100), workload.assign(40)],

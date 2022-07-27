@@ -4,11 +4,11 @@ part of fuzzylogic;
 /// a leaf node (i.e. one fuzzy set) or a composite node (e.g. a fuzzy AND
 /// between two fuzzy sets).
 abstract class FuzzyNode {
-  FuzzyNode parent;
-  Set<FuzzyNode> children;
+  FuzzyNode? parent;
+  Set<FuzzyNode>? children;
 
   bool get isRoot => parent == null;
-  bool get isLeaf => children == null || children.isEmpty;
+  bool get isLeaf => children == null || children!.isEmpty;
 
   FuzzyRule operator >>(FuzzyNode antecedent) {
     return FuzzyRule(this, antecedent);
@@ -20,12 +20,12 @@ abstract class FuzzyNode {
       return (this as FuzzySet).variable == variable;
     } else {
       assert(this is FuzzyTerm);
-      return children.any((node) => node.containsVariable(variable));
+      return children!.any((node) => node.containsVariable(variable));
     }
   }
 
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs);
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs);
+  num? getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs);
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs);
 
   FuzzyNode operator &(FuzzyNode other) => _FuzzyAnd(this, other);
   FuzzyNode operator |(FuzzyNode other) => _FuzzyOr(this, other);
@@ -49,25 +49,25 @@ class _FuzzyAnd extends FuzzyTerm {
   }
 
   @override
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs) {
-    final minimum = children.fold(null, (num value, FuzzyNode n) {
+  num? getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs) {
+    final minimum = children!.fold(null, (num? value, FuzzyNode n) {
       final dom = n.getDegreeOfMembershipWithInputs(inputs);
       if (value == null) return dom;
-      if (dom < value) return dom;
+      if (dom! < value) return dom;
       return value;
     });
     return minimum;
   }
 
   @override
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs) {
-    children.forEach((node) => node.setDegreeOfTruth(degreeOfTruth, outputs));
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs) {
+    children!.forEach((node) => node.setDegreeOfTruth(degreeOfTruth, outputs));
   }
 
   @override
   String toString() {
-    var a = children.first;
-    var b = children.last;
+    var a = children!.first;
+    var b = children!.last;
     return '($a & $b)';
   }
 }
@@ -79,10 +79,10 @@ class _FuzzyOr extends FuzzyTerm {
   }
 
   @override
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs) {
-    final maximum = children.fold(null, (num value, FuzzyNode n) {
+  num? getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs) {
+    final maximum = children!.fold(null, (num? value, FuzzyNode n) {
       final dom = n.getDegreeOfMembershipWithInputs(inputs);
-      if (value == null || value < dom) {
+      if (value == null || value < dom!) {
         return dom;
       } else {
         return value;
@@ -92,15 +92,15 @@ class _FuzzyOr extends FuzzyTerm {
   }
 
   @override
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs) {
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs) {
     // Cannot say for sure which one is truthful.
     throw UnimplementedError();
   }
 
   @override
   String toString() {
-    var a = children.first;
-    var b = children.last;
+    var a = children!.first;
+    var b = children!.last;
     return '($a | $b)';
   }
 }
@@ -112,19 +112,19 @@ class _FuzzyNot extends FuzzyTerm {
   }
 
   @override
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs) {
-    return (1 - children.single.getDegreeOfMembershipWithInputs(inputs));
+  num getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs) {
+    return (1 - children!.single.getDegreeOfMembershipWithInputs(inputs)!);
   }
 
   @override
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs) {
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs) {
     // Cannot say for sure what this means for the underlying child.
     throw UnimplementedError();
   }
 
   @override
   String toString() {
-    var a = children.first;
+    var a = children!.first;
     return '~$a';
   }
 }

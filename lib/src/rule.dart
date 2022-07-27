@@ -10,7 +10,7 @@ class FuzzyRule {
 
   /// Finds out the degree of membership (truth) of the antecedent and applies
   /// it to the consequent.
-  void resolve(List<FuzzyValue> inputs, List<FuzzyValue> outputs) {
+  void resolve(List<FuzzyValue>? inputs, List<FuzzyValue> outputs) {
     logger.fine('Resolving rule $this');
     var degreeOfTruth = antecedent.getDegreeOfMembershipWithInputs(inputs);
     consequent.setDegreeOfTruth(degreeOfTruth, outputs);

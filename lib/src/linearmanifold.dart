@@ -6,11 +6,11 @@ part of fuzzylogic;
 /// LinearManifold is modeling the most widely used fuzzification method - linear
 /// "line segments" that together form a shape like a triangle, a shoulder or
 /// a trapezoid.
-class LinearManifold<T extends num> extends MembershipFunction<T> {
-  List<_LinearManifoldSegment> segments;
+class LinearManifold<T extends num?> extends MembershipFunction<T> {
+  late List<_LinearManifoldSegment> segments;
 
-  final num _lowestCrispValue;
-  final num _highestCrispValue;
+  final num? _lowestCrispValue;
+  final num? _highestCrispValue;
 
   /// The default constructor takes a list of tuples as its input, and is modeled
   /// after FCL's set definition syntax.
@@ -19,7 +19,7 @@ class LinearManifold<T extends num> extends MembershipFunction<T> {
   /// and ending at 12 would be created as follows:
   ///
   ///     var trapezoid = new LinearManifold([[2,0], [5,1], [6,1], [12,0]]);
-  LinearManifold(List<List<num>> inputList)
+  LinearManifold(List<List<num?>> inputList)
       : _lowestCrispValue = inputList.first[0],
         _highestCrispValue = inputList.last[0] {
     segments = <_LinearManifoldSegment>[];
@@ -31,16 +31,16 @@ class LinearManifold<T extends num> extends MembershipFunction<T> {
   }
 
   @override
-  num getDegreeOfMembership(num crisp) {
-    if (crisp <= _lowestCrispValue) {
-      return segments.first.from.degreeOfMembership;
+  num getDegreeOfMembership(T crisp) {
+    if (crisp! <= _lowestCrispValue!) {
+      return segments.first.from.degreeOfMembership!;
     }
-    if (crisp >= _highestCrispValue) {
-      return segments.last.to.degreeOfMembership;
+    if (crisp >= _highestCrispValue!) {
+      return segments.last.to.degreeOfMembership!;
     }
     return segments
         .firstWhere((var segment) =>
-            segment.from.crisp <= crisp && segment.to.crisp >= crisp)
+            segment.from.crisp! <= crisp && segment.to.crisp! >= crisp)
         .getDegreeOfMembership(crisp);
   }
 }
@@ -52,17 +52,17 @@ class _LinearManifoldSegment {
   _LinearManifoldSegment(this.from, this.to);
 
   num getDegreeOfMembership(num crisp) {
-    assert(crisp >= from.crisp);
-    assert(crisp <= to.crisp);
-    var a = from.degreeOfMembership;
-    var b = to.degreeOfMembership;
-    return a + (crisp - from.crisp) / (to.crisp - from.crisp) * (b - a);
+    assert(crisp >= from.crisp!);
+    assert(crisp <= to.crisp!);
+    var a = from.degreeOfMembership!;
+    var b = to.degreeOfMembership!;
+    return a + (crisp - from.crisp!) / (to.crisp! - from.crisp!) * (b - a);
   }
 }
 
 class _LinearManifoldPoint {
-  final num crisp;
-  final num degreeOfMembership;
+  final num? crisp;
+  final num? degreeOfMembership;
 
   _LinearManifoldPoint(this.crisp, this.degreeOfMembership);
 }

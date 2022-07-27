@@ -51,7 +51,7 @@ void main() {
     });
     // TODO: test saw-like manifolds
     test('finds the variable which it is assigned to', () {
-      var roomTemperature = FuzzyVariable<int>();
+      var roomTemperature = FuzzyVariable<int?>();
       var cold = FuzzySet.LeftShoulder(10, 15, 22);
       var comfortable = FuzzySet.Trapezoid(15, 20, 25, 30);
       var hot = FuzzySet.RightShoulder(25, 30, 35);
@@ -126,7 +126,7 @@ void main() {
       ]);
 
       // Create the placeholder for output.
-      var bazookaOutput = bazookaDesirability.createOutputPlaceholder();
+      FuzzyValue<int?> bazookaOutput = bazookaDesirability.createOutputPlaceholder();
 
       // Use the fuzzy inference engine.
       frb.resolve(
@@ -150,7 +150,7 @@ void main() {
           throwsA(const TypeMatcher<FuzzyLogicStateError>()));
 
       // Another try
-      var bazookaOutput2 = bazookaDesirability.createOutputPlaceholder();
+      FuzzyValue<int?> bazookaOutput2 = bazookaDesirability.createOutputPlaceholder();
       frb.resolve(
           inputs: [distanceToTarget.assign(5), bazookaAmmo.assign(8)],
           outputs: [bazookaOutput2]);
@@ -182,7 +182,7 @@ class Ammo extends FuzzyVariable<int> {
   }
 }
 
-class Desirability extends FuzzyVariable<int> {
+class Desirability extends FuzzyVariable<int?> {
   var Undesirable = FuzzySet.LeftShoulder(0, 20, 50);
   var Desirable = FuzzySet.Triangle(20, 50, 70);
   var VeryDesirable = FuzzySet.RightShoulder(50, 70, 100);

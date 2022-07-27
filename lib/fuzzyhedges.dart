@@ -18,27 +18,27 @@ class _FuzzyHedge extends FuzzyTerm {
   final String name;
 
   @override
-  num getDegreeOfMembershipWithInputs(List<FuzzyValue> inputs) {
+  num getDegreeOfMembershipWithInputs(List<FuzzyValue>? inputs) {
     return hedgeFunction(
-        children.single.getDegreeOfMembershipWithInputs(inputs));
+        children!.single.getDegreeOfMembershipWithInputs(inputs));
   }
 
   @override
-  void setDegreeOfTruth(num degreeOfTruth, List<FuzzyValue> outputs) {
+  void setDegreeOfTruth(num? degreeOfTruth, List<FuzzyValue> outputs) {
     // TODO: change DOT through hedgeFunction?
-    children.single.setDegreeOfTruth(degreeOfTruth, outputs);
+    children!.single.setDegreeOfTruth(degreeOfTruth, outputs);
   }
 
   @override
   String toString() {
-    var a = children.first;
+    var a = children!.first;
     return '$name($a)';
   }
 }
 
-typedef _HedgeFunction = num Function(num degreeOfMembership);
+typedef _HedgeFunction = num Function(num? degreeOfMembership);
 
 FuzzyNode very(FuzzyNode node) =>
-    _FuzzyHedge(node, (num dom) => pow(dom, 2), 'very');
+    _FuzzyHedge(node, (num? dom) => pow(dom!, 2), 'very');
 FuzzyNode fairly(FuzzyNode node) =>
-    _FuzzyHedge(node, (num dom) => sqrt(dom), 'fairly');
+    _FuzzyHedge(node, (num? dom) => sqrt(dom!), 'fairly');

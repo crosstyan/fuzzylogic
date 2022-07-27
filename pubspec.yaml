@@ -4,9 +4,10 @@ description: A fuzzy logic module.
 homepage: https://github.com/filiph/fuzzylogic
 
 environment:
-    sdk: ">=2.8.0 <3.0.0"
+    sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
+  collection: ^1.16.0
   logging: ^1.0.2
 
 dev_dependencies:
