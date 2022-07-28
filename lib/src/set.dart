@@ -23,7 +23,7 @@ class FuzzySet<T extends num?> extends FuzzyNode {
 
   /// Finds the degree of membership of a given crisp value in the set.
   num getDegreeOfMembership(T crispValue) {
-    var dom = membershipFunction.getDegreeOfMembership(crispValue)!;
+    var dom = membershipFunction.getDegreeOfMembership(crispValue);
     logger.fine('- degree of membership for ' +
         _nameOrUnnamed(name, 'set') +
         ' (repr=$representativeValue) is ${(dom * 100).round()}');
